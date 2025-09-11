@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>You're Trapped! 😈</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            position: relative;
+        }
+
+        .container {
+            text-align: center;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 3rem;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .escape-box {
+            margin: 2rem 0;
+        }
+
+        .escape-input {
+            padding: 15px 20px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 10px;
+            width: 300px;
+            max-width: 90vw;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .escape-input:focus {
+            outline: none;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        .hint {
+            font-size: 0.9em;
+            margin-top: 1rem;
+            opacity: 0.8;
+            font-style: italic;
+        }
+
+        .close-btn {
+            position: absolute;
+            background: #ff4757;
+            color: white;
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            font-size: 1.5em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
+            z-index: 1000;
+        }
+
+        .close-btn:hover {
+            background: #ff3742;
+            transform: scale(1.1);
+        }
+
+        .floating-text {
+            position: absolute;
+            font-size: 1.2em;
+            color: rgba(255, 255, 255, 0.7);
+            pointer-events: none;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: particle-float 6s infinite linear;
+        }
+
+        @keyframes particle-float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .success {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .success h1 {
+            font-size: 4em;
+            margin-bottom: 2rem;
+        }
+
+        .success-btn {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            background: white;
+            color: #333;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: transform 0.2s ease;
+        }
+
+        .success-btn:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <h1>🚪 You're Trapped! 🚪</h1>
+        <p class="subtitle">The only way out is to find the secret phrase...</p>
+        
+        <div class="escape-box">
+            <input type="text" class="escape-input" id="escapeInput" placeholder="Enter the secret phrase..." autocomplete="off">
+            <p class="hint">💡 Hint: What do you say when you're not chomu? (4 words in Hinglish)</p>
+        </div>
+    </div>
+
+    <button class="close-btn" id="closeBtn">✖</button>
+
+    <div class="floating-text" style="top: 10%; left: 20%;">No escape! 😈</div>
+    <div class="floating-text" style="top: 70%; right: 15%; animation-delay: 1s;">Muahahaha! 👹</div>
+    <div class="floating-text" style="top: 40%; left: 10%; animation-delay: 2s;">Trapped forever! 🔒</div>
+
+    <div class="success" id="success">
+        <h1>🎉 Freedom! 🎉</h1>
+        <p style="font-size: 1.5em; margin-bottom: 2rem;">You found the secret phrase!</p>
+        <button class="success-btn" onclick="window.close()">Close Window</button>
+    </div>
+
+    <script>
+        // Prevent various ways of closing
+        window.onbeforeunload = function() {
+            return "Are you sure you want to leave? You haven't escaped yet!";
+        };
+
+        // Disable right-click context menu
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        // Disable common keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Disable Alt+F4, Ctrl+W, Ctrl+T, etc.
+            if ((e.altKey && e.keyCode === 115) || // Alt+F4
+                (e.ctrlKey && e.keyCode === 87) ||  // Ctrl+W
+                (e.ctrlKey && e.keyCode === 84) ||  // Ctrl+T
+                (e.ctrlKey && e.keyCode === 82) ||  // Ctrl+R
+                (e.keyCode === 116)) {              // F5
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        const closeBtn = document.getElementById('closeBtn');
+        const escapeInput = document.getElementById('escapeInput');
+        const success = document.getElementById('success');
+
+        // Make the close button move when hovered
+        closeBtn.addEventListener('mouseenter', function() {
+            moveButton();
+        });
+
+        // Also move on click attempt
+        closeBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            moveButton();
+        });
+
+        function moveButton() {
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+            const btnWidth = closeBtn.offsetWidth;
+            const btnHeight = closeBtn.offsetHeight;
+            
+            const maxX = windowWidth - btnWidth - 20;
+            const maxY = windowHeight - btnHeight - 20;
+            
+            const newX = Math.random() * maxX + 10;
+            const newY = Math.random() * maxY + 10;
+            
+            closeBtn.style.left = newX + 'px';
+            closeBtn.style.top = newY + 'px';
+        }
+
+        // Initial position for close button
+        function positionButton() {
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+            closeBtn.style.left = (windowWidth - 80) + 'px';
+            closeBtn.style.top = '20px';
+        }
+
+        // Check for escape phrase
+        escapeInput.addEventListener('input', function() {
+            const phrase = this.value.toLowerCase().trim();
+            if (phrase === 'let me out' || phrase === 'help me' || phrase === 'free me') {
+                window.onbeforeunload = null; // Remove the beforeunload event
+                success.style.display = 'flex';
+            }
+        });
+
+        // Create floating particles
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            
+            const size = Math.random() * 5 + 2;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            particle.style.animationDelay = Math.random() * 2 + 's';
+            
+            document.getElementById('particles').appendChild(particle);
+            
+            // Remove particle after animation
+            setTimeout(() => {
+                if (particle.parentNode) {
+                    particle.parentNode.removeChild(particle);
+                }
+            }, 8000);
+        }
+
+        // Create particles periodically
+        setInterval(createParticle, 300);
+
+        // Initialize
+        window.addEventListener('load', function() {
+            positionButton();
+            escapeInput.focus();
+        });
+
+        // Reposition button on window resize
+        window.addEventListener('resize', positionButton);
+
+        // Try to prevent tab closing (limited effectiveness in modern browsers)
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && (e.key === 'w' || e.key === 'W')) {
+                e.preventDefault();
+                moveButton(); // Move the button as a distraction
+            }
+        });
+    </script>
+</body>
+</html>
